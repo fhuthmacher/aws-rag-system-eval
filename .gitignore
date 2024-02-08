@@ -10,3 +10,4 @@ dev-mlflow.env
 RAG-System-Eval-DeepDive-langsmith.ipynb
 *.csv
 .DS_Store
+*.pptx
