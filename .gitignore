@@ -5,4 +5,8 @@ qsdata_20.xml
 *.jsonl
 ./dev-langsmith.env
 ./dev-mlflow.env
+dev-langsmith.env
+dev-mlflow.env
+RAG-System-Eval-DeepDive-langsmith.ipynb
 *.csv
+.DS_Store
