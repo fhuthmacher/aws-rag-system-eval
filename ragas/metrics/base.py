@@ -107,7 +107,8 @@ class Metric(ABC):
 
 
 def _llm_factory():
-    return BedrockChat(model_id="anthropic.claude-instant-v1", model_kwargs={"temperature": 0.1})  # type: ignore
+    #return BedrockChat(model_id="anthropic.claude-instant-v1", model_kwargs={"temperature": 0.1})  # type: ignore
+    return BedrockChat(model_id="anthropic.claude-v2", model_kwargs={"temperature": 0})  # type: ignore
 
 
 @dataclass
