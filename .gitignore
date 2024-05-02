@@ -20,3 +20,9 @@ RAG-System-Eval-DeepDive-langsmith.ipynb
 mlflow_run_predictions.csv
 ./ragas
 *.pyc
+charsplitter_chunksizes.png
+embeddingmodels_comparison.png
+prompttemplate_comparison.png
+retriever_comparison.png
+tokensplitter_chunksizes.png
+tokensplitter_vs_charsplitter.png
