@@ -14,4 +14,4 @@ RAG-System-Eval-DeepDive-langsmith.ipynb
 *.pptx
 .conda
 *.pyc
-./tmp/*
+/tmp/*
