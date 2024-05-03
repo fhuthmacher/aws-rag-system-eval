@@ -13,16 +13,5 @@ RAG-System-Eval-DeepDive-langsmith.ipynb
 .DS_Store
 *.pptx
 .conda
-.venv
-aws_mlflow-0.0.1-py3-none-any.whl
-rag_llama_testing.ipynb
-RAG-System-Eval-DeepDive-langsmith.ipynb
-mlflow_run_predictions.csv
-./ragas
 *.pyc
-./charsplitter_chunksizes.png
-./embeddingmodels_comparison.png
-./prompttemplate_comparison.png
-./retriever_comparison.png
-./tokensplitter_chunksizes.png
-./tokensplitter_vs_charsplitter.png
+./tmp
