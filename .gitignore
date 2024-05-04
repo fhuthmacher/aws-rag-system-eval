@@ -8,6 +8,7 @@ qsdata_20.xml
 dev-langsmith.env
 dev-mlflow.env
 RAG-System-Eval-DeepDive-langsmith.ipynb
+RAG-System-Eval-DeepDive-no-langchain.ipynb
 *.csv
 .DS_Store
 *.pptx

@@ -6,7 +6,7 @@ Parameters:
   UserProfileName:
     Type: String
     Description: The user profile name for the SageMaker workshop
-    Default: 'SageMakerUser'
+    Default: 'sagemakeruser'
   DomainName:
     Type: String
     Description: The domain name of the Sagemaker studio instance
@@ -984,7 +984,7 @@ Resources:
                   studio_lifecycle_config = smclient.create_studio_lifecycle_config(
                       StudioLifecycleConfigName=StudioLifecycleConfigName,
                       StudioLifecycleConfigContent=base64_bytes.decode('ascii'),
-                      StudioLifecycleConfigAppType='KernelGateway',
+                      StudioLifecycleConfigAppType= 'CodeEditor', #'KernelGateway',
                   )
 
                   domain = smclient.describe_domain(
@@ -1039,6 +1039,24 @@ Resources:
                     }
                   )
                   print("created domain update: " + str(response))
+                  # Check the status of the domain
+                  while True:
+                    describe_domain_response = smclient.describe_domain(
+                        DomainId=domain_id
+                    )
+                    domain_status = describe_domain_response['Status']
+                    
+                    if domain_status == 'InService':
+                        print(f"Domain {domain_id} is in InService state.")
+                        break
+                    elif domain_status in ['Failed', 'Stopped']:
+                        print(f"Domain {domain_id} is in {domain_status} state. Cannot proceed.")
+                        break
+                    else:
+                        print(f"Domain {domain_id} is in {domain_status} state. Waiting for it to become InService...")
+                        time.sleep(30)  # Wait for 30 seconds before checking again
+                  
+                  return studio_lifecycle_config['StudioLifecycleConfigArn']
                 except Exception as e:
                   print(str(e))
                   if e.response['Error']['Code'] == 'ResourceNotFound':
@@ -1049,7 +1067,7 @@ Resources:
                       print("An error occurred:", e)
               
 
-              def create_space_and_code_editor(domain_id,space_name,instance_type, region_name, SageMakerImageArn, SageMakerImageVersionAlias, UserProfileName):
+              def create_space_and_code_editor(domain_id,space_name,instance_type, region_name, SageMakerImageArn, SageMakerImageVersionAlias, UserProfileName, LifecycleConfigArn):
                 try:
                     smclient = boto3.client('sagemaker', region_name=region_name)
 
@@ -1102,7 +1120,7 @@ Resources:
                             
                             ResourceSpec={
                                 'InstanceType': instance_type, #'ml.t3.medium',
-                                #'LifecycleConfigArn': 'string',
+                                #'LifecycleConfigArn': LifecycleConfigArn,
                                 # 'SageMakerImageVersionArn': 'string',
                                 "SageMakerImageArn": SageMakerImageArn,
                                 "SageMakerImageVersionAlias": SageMakerImageVersionAlias,
@@ -1117,8 +1135,8 @@ Resources:
                     else:
                         raise e
               def handle_create(bucket_name,region_name, account_id, domain_id, git_repo, user_profile, space_name,instance_type, sm_image_arn, sm_image_alias):
-                  update_domain(domain_id, user_profile, git_repo, region_name)
-                  create_space_and_code_editor(domain_id,space_name,instance_type, region_name, sm_image_arn, sm_image_alias, user_profile)
+                  LifecycleConfigArn = update_domain(domain_id, user_profile, git_repo, region_name)
+                  create_space_and_code_editor(domain_id,space_name,instance_type, region_name, sm_image_arn, sm_image_alias, user_profile, LifecycleConfigArn)
 
                   dict_return={}
                 
@@ -1158,6 +1176,8 @@ Resources:
                   cfnresponse.send(event,context,response_,return_dict,physical_resourceId)
         MemorySize: '128'
         Role: !GetAtt LambdaExecutionRole.Arn
+        Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:770693421928:layer:Klayers-p312-boto3:5"
         Environment:
             Variables:
                 BUCKET: !Ref StudioBucket
