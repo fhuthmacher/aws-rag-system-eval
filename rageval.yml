@@ -141,6 +141,9 @@ Resources:
                   - iam:GetRole
                   - iam:GetRolePolicy
                   - iam:CreateServiceLinkedRole
+                  - iam:CreateRole
+                  - iam:PutRolePolicy
+                  - iam:PassRole
                 Resource: '*'
         - PolicyName: !Join ['_', ['bedrock-access', !Select [4, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]]]
           PolicyDocument:
@@ -150,6 +153,7 @@ Resources:
                 Effect: Allow
                 Action:
                   - bedrock:*
+                  - bedrock:ListDataSources
                   - bedrock-runtime:*
                 Resource: '*'
         - PolicyName: !Join ['_', ['aoss-access', !Select [4, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]]]
