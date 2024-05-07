@@ -1,6 +1,5 @@
 /data/*
 .DS_Store
-*.env
 metrics.webp
 qsdata_20.xml
 *.jsonl
