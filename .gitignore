@@ -14,3 +14,4 @@ RAG-System-Eval-DeepDive-no-langchain.ipynb
 .conda
 *.pyc
 /tmp/*
+/olderVersions/debug.py
